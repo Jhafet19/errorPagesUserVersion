@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="col">
+            <div class="row">
+                <div class="col-6">
+                    <h1>Bienvenidos a mi onepage</h1>
+                    <p>Esta pagina funciona cargando elementos con el elemeto scrll</p>
+                </div>
+                <div class="col-6">
+                    <img src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*N1nE0iZyJC18IYry84JpUA.jpeg" alt="Esto es una imagen" srcset="" class="img-fluid">
+                </div>
+            </div>
+            <br>
+            <div class="row" id="tarjetas">
+            <!-- Cargar cards -->
+             <div class="card  col-4">
+                <div class="card-body">
+                    <h5 class="card-title"> titulo por defecto</h5>
+                    <p class="card-text">
+                        Texto por defecto
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos eius, commodi nemo architecto soluta, vitae ratione doloribus neque culpa pariatur rem et corporis cumque sapiente fuga sunt necessitatibus accusamus laudantium!
+                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus dolorum tenetur, saepe temporibus cum excepturi doloribus. Reprehenderit corporis eaque laudantium fuga totam. Quae error libero qui ullam beatae. Dicta, fuga.
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum tempore quaerat saepe eaque doloribus sed qui beatae, magni minus accusantium nulla voluptas atque quia iure in laudantium mollitia temporibus aliquid! 
+                    </p>
+                </div>
+             </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var i =1;
+
+        function loadCards(){
+          console.log("LLEgo?");
+          for (let index = 0; index < 5; index++) {
+           
+            if(i>=100){
+                break;
+            }
+             var objeto ={
+                title:'Cards numero '+ i,
+                text:'Texto dummy de la card: '+i
+             }
+             i++;
+
+             var card =document.createElement('div')
+             card.setAttribute('class','card col-4')
+
+             var body =document.createElement('div')
+             body.setAttribute('class','card-body')
+             
+             var h5 =document.createElement('h5');
+             body.setAttribute('class','card-title');
+             h5.innerHTML=objeto.title;
+
+             var p =document.createElement('p');
+             //funcion
+             body.setAttribute('class','card-body');
+             //atributo
+             p.innerHTML=objeto.text;
+
+             body.appendChild(h5);
+             body.appendChild(p);
+             card.appendChild(body);    
+
+             document.querySelector('#tarjetas').appendChild(card);
+            }
+
+        }
+        window.addEventListener('scroll',()=>{
+            
+            if((window.innerHeight + window.scrollY)>= document.body.offsetHeight){
+                loadCards();
+
+                console.log("askldbiv");
+                
+            }
+        })
+
+    </script>
+
+</body>
+</html>
