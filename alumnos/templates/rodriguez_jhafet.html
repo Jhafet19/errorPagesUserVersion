@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agregar Alumnos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+  <header class=" header">
+
+  </header>
+  <main>
+  <div class="container">
+    <div class="col">
+      <div class="row">
+        <div id="spinner" class="text-center col" style="display: none">
+          <div class="spinner-border text-primary" role="status"></div>
+          <span> Cargando ...</span>
+        </div>
+
+        <!-- El formulario -->
+        <div class="col-6 mt-3">
+          <h1>Agregar Alumnos</h1>
+          <form method="post" id="alumnosForm">
+            {% csrf_token %} {{form.as_p}}
+            <input type="number" hidden id="id_alumno">
+            <button class="btn btn-primary" type="submit">
+              Agregar producto
+            </button>
+          </form>
+          <div>
+            <p id="mensaje"></p>
+          </div>
+        </div>
+
+        <!-- Vista de productos-->
+        <div class="col-6 mt-3">
+          <h1>Ver Alumnos</h1>
+          <div class="row" id="alumnos"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+  <script>
+    function actualizarAlumno(alumnoString) {
+
+      let nombreInput = document.querySelector('#id_nombre');
+      let apellidInput = document.querySelector('#id_Apellido');
+      let edadInput = document.querySelector('#id_Edad');
+      let matriculaInput = document.querySelector('#id_Matricula');
+      let correpInput = document.querySelector('#id_Correo');
+      let idpInput = document.querySelector('#id_alumno');
+
+      let alumno = JSON.parse(decodeURIComponent(alumnoString));
+      idpInput.value = alumno.id
+      nombreInput.value = alumno.nombre;
+      apellidInput.value = alumno.Apellido;
+      edadInput.value = alumno.Edad;
+      matriculaInput.value = alumno.Matricula;
+      correpInput.value = alumno.Correo;
+
+    }
+    function eliminarAlumno(id) {
+      let url = `http://127.0.0.1:8000/alumnos/api/${id}/`;
+
+      fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`Error en la solicitud: ${res.status}`);
+          }
+
+          return res.status === 204 ? null : res.json();
+        })
+        .then((data) => {
+          document.getElementById("mensaje").innerText = "Alumno eliminado con éxito";
+
+          obtenerAlumnos(); 
+        })
+        .catch((e) => {
+          console.error("Error al eliminar el alumno:", e);
+          document.getElementById("mensaje").innerText = "Error al eliminar el alumno";
+        })
+        .finally(() => toogleSpinner(false));
+    }
+
+    function obtenerAlumnos() {
+      const url = "http://127.0.0.1:8000/alumnos/api/";
+      let nombreInput = document.querySelector('#id_nombre');
+      let apellidInput = document.querySelector('#id_Apellido');
+      let edadInput = document.querySelector('#id_Edad');
+      let matriculaInput = document.querySelector('#id_Matricula');
+      let correpInput = document.querySelector('#id_Correo');
+      let idpInput = document.querySelector('#id_alumno');
+      idpInput.value = ""
+      nombreInput.value = "";
+      apellidInput.value = "";
+      edadInput.value = "";
+      matriculaInput.value = "";
+      correpInput.value = "";
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          let alumnosDiv = document.querySelector("#alumnos");
+          alumnosDiv.innerHTML = "";
+          data.forEach((alumno) => {
+
+            alumnosDiv.innerHTML += `
+          <div class="col-12 mb-3"> 
+            <div class="d-flex justify-content-between align-items-center border p-3 rounded">
+              <p class="mb-0">${alumno.nombre} - ${alumno.Apellido}  ${alumno.Edad} ${alumno.Matricula} - ${alumno.Correo}</p>
+              <div class="d-flex gap-2">
+                <button class="btn btn-danger" onclick="eliminarAlumno(${alumno.id})">Eliminar</button>
+<button class="btn btn-warning" onclick="actualizarAlumno('${encodeURIComponent(JSON.stringify(alumno))}')">Editar</button>              </div>
+            </div>
+          </div>
+        `;
+          });
+        })
+        .catch((e) => console.log(e))
+        .finally(() => toogleSpinner(false));
+    }
+    obtenerAlumnos()
+
+
+    let form = document.getElementById("alumnosForm");
+
+    const url = 'http://127.0.0.1:8000/alumnos/api/'
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      //Guarda todos los datos del formulario
+      let formData = new FormData(this);
+      let idpInput = document.querySelector('#id_alumno');
+      let idValue = idpInput.value;
+      let jsonData = {};
+      formData.forEach((value, key) => (jsonData[key] = value));
+      toogleSpinner(true);
+
+      if (idValue == "") {
+        fetch(url, {
+          headers: {
+            "Content-Type": "application/json", // Indica que estamos enviando datos en formato JSON
+          },
+          method: "POST",
+
+          body: JSON.stringify(jsonData),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            document.getElementById("mensaje").innerText = "Registro exitoso";
+            //Repintar los elementos
+
+            obtenerAlumnos();
+          })
+          .catch((e) => console.error(e))
+          .finally(() => toogleSpinner(false));
+      } else {
+        console.log(idValue)
+        let urlActualizar = `http://127.0.0.1:8000/alumnos/api/${idValue}/`
+        fetch(urlActualizar, {
+          headers: {
+            "Content-Type": "application/json", // Indica que estamos enviando datos en formato JSON
+          },
+          method: "PUT",
+
+          body: JSON.stringify(jsonData),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            document.getElementById("mensaje").innerText = "Registro exitoso";
+            //Repintar los elementos
+
+            obtenerAlumnos();
+          })
+          .catch((e) => console.error(e))
+          .finally(() => toogleSpinner(false));
+      }
+
+    });
+
+  </script>
+
+  <script>
+    function toogleSpinner(show) {
+      document.getElementById("spinner").style.display = show
+        ? "block"
+        : "none";
+    }
+  </script>
+  </script>
+</body>
+
+</html>

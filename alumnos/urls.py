@@ -1,12 +1,12 @@
 from django.urls import path,include
 from rest_framework.routers import SimpleRouter
-from .views import ProductoViewSet,agregar_producto
+from .views import AlumnoViewSet,agregar_alumnos
 
 router= SimpleRouter()
 
-router.register(r'api',ProductoViewSet)
+router.register(r'api',AlumnoViewSet)
 urlpatterns=[
     path('',include(router.urls)),
-    path('agregar/',agregar_producto,name='agregar_productos')
+    path('agregar/',agregar_alumnos,name='agregar_alumno')
     
 ]
