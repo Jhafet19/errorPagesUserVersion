@@ -5,44 +5,50 @@ from django.http import JsonResponse
 from .models import ErrorLog
 # Create your views here.
 
+
 def index(request):
     return HttpResponse("<h1>Hola Mundo y todos los que en el habitan </h1>")
 
+
 def user(request):
-    return render(request,'user.html',status=200)
-
-def show_error_404 (request):
-    return render(request,'404.html',status= 404)
+    return render(request, "user.html", status=200)
 
 
-def show_error_500 (request):
-    return render(request,'500.html', status=500)
+def show_error_404(request):
+    return render(request, "404.html", status=404)
+
+
+def show_error_500(request):
+    return render(request, "500.html", status=500)
+
 
 def generar_error(request):
-    return 7/0
+    return 7 / 0
+
 
 def onepage(request):
-    return render(request,'onepage.html',status=200)
+    return render(request, "onepage.html", status=200)
 
 
 def busqueda(request):
-
-
-    
-    query = request.GET.get("q","")
-    results=[]
+    query = request.GET.get("q", "")
+    results = []
     if query:
-        data= google_search(query)
-        results= data.get("items",[])
-    return render(request,'search.html',
-                  #se envian parametros 
-                  {"results":results,"query":query},
-                  status=200)
+        data = google_search(query)
+        results = data.get("items", [])
+    return render(
+        request,
+        "search.html",
+        # se envian parametros
+        {"results": results, "query": query},
+        status=200,
+    )
 
 
 def error_logs(request):
-    return render(request,'error_logs.html')
+    return render(request, "error_logs.html")
+
 
 def get_error_logs(request):
-    errors= ErrorLog.objects.values('id','codigo','mensaje','fecha')
-    return JsonResponse({'data':list(errors)})
+    errors = ErrorLog.objects.values("id", "codigo", "mensaje", "fecha")
+    return JsonResponse({"data": list(errors)})

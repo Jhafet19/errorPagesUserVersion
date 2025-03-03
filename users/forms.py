@@ -132,7 +132,6 @@ class CustomUserCreationForm(UserCreationForm):
             "password2",
         ]
 
-    
     def clean_email(self):
         email = self.cleaned_data.get("email")
         if not re.match(r"^[0-9]{5}[a-zA-Z]{2}[0-9]{3}@utez\.edu\.mx$", email):
@@ -147,7 +146,8 @@ class CustomUserCreationForm(UserCreationForm):
         print(f"name: {name}")
         if not re.match(r"^[a-zA-Z ]{1,100}$", name):
             raise ValidationError(
-                "El nombre solo debe contener letras y espacios, y no debe superar los 100 caracteres.")
+                "El nombre solo debe contener letras y espacios, y no debe superar los 100 caracteres."
+            )
         return name
 
     def clean_surname(self):
@@ -155,15 +155,14 @@ class CustomUserCreationForm(UserCreationForm):
         print(f"surname: {surname}")
         if not re.match(r"^[a-zA-Z ]{1,100}$", surname):
             raise ValidationError(
-                "El apellido solo debe contener letras y espacios, y no debe superar los 100 caracteres.")
+                "El apellido solo debe contener letras y espacios, y no debe superar los 100 caracteres."
+            )
         return surname
 
     def clean_control_number(self):
         control_number = self.cleaned_data.get("control_number")
         if not re.match(r"^[0-9]{5}[a-zA-Z]{2}[0-9]{3}$", control_number):
-            raise ValidationError(
-                "La matrícula debe pertenecer a la UTEZ"
-            )
+            raise ValidationError("La matrícula debe pertenecer a la UTEZ")
         return control_number
 
     def clean_tel(self):
@@ -186,7 +185,6 @@ class CustomUserCreationForm(UserCreationForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         print("Despues del scouting")
-
 
         if password1 and password2 and password1 != password2:
             print("en el IF")

@@ -20,7 +20,4 @@ class categoriaForm(forms.ModelForm):
                 }
             ),
         }
-        labels={
-            'nombre':'nombre de la categoria',
-            'imagen':'URl de la imagen'
-        }
+        labels = {"nombre": "nombre de la categoria", "imagen": "URl de la imagen"}

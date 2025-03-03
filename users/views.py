@@ -7,6 +7,7 @@ from users.message import message
 import json
 from django.views.decorators.csrf import csrf_exempt
 
+
 @csrf_exempt
 def register_view(request):
     print(f"en register_view")
@@ -21,11 +22,17 @@ def register_view(request):
         #         for error in errors:
         #             messages.error(request, error)
         else:
-            error_messages = "\n".join([" ".join(errors) for errors in form.errors.values()])
+            error_messages = "\n".join(
+                [" ".join(errors) for errors in form.errors.values()]
+            )
             print(error_messages)
             msg = message("error", error_messages, 400)
-            
-            return render(request, "register.html", {"form": form, "message": json.dumps(msg.to_dict())})
+
+            return render(
+                request,
+                "register.html",
+                {"form": form, "message": json.dumps(msg.to_dict())},
+            )
     else:
         form = CustomUserCreationForm()
         print(f"FORm2: {form}")
@@ -46,13 +53,13 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    
+
     # Crear un mensaje de éxito con imagen
     msg = message(
         "info",
         "Se ha cerrado sesión exitosamente",
         200,
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8MIbugIhZBykSmQcR0QPcfnPUBOZQ6bm35w&s"
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8MIbugIhZBykSmQcR0QPcfnPUBOZQ6bm35w&s",
     )
 
     return render(request, "login.html", {"message": json.dumps(msg.to_dict())})
