@@ -27,6 +27,7 @@ def get_categorias_json(request):
     ]
     return JsonResponse(json, safe=False)
 
+
 def json_view(request):
-    print('Pasando por json_view')
-    return render(request,'jsonCategorias.html')
+    print("Pasando por json_view")
+    return render(request, "jsonCategorias.html")
