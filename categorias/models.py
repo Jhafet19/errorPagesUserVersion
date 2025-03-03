@@ -6,3 +6,5 @@ class Categoria(models.Model):
     nombre=models.CharField(max_length=100)
     imagen=models.URLField()
 
+
+
